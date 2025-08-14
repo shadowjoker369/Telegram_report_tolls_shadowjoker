@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Telegram Report Tool | SHADOW JOKER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0088cc;
+            --primary-dark: #006699;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px 0;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .tg-join-btn {
+            background-color: white;
+            color: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .tg-join-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .tg-join-btn i {
+            margin-right: 8px;
+        }
+        
+        .main-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background-color: white;
+        }
+        
+        .tab i {
+            margin-right: 8px;
+        }
+        
+        .tab-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tab-content {
+            padding: 25px;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 136, 204, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .form-check-input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .form-check-label {
+            font-weight: 500;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-block {
+            display: flex;
+            width: 100%;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            display: none;
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .result-content {
+            line-height: 1.8;
+        }
+        
+        .result-item {
+            margin-bottom: 8px;
+            display: flex;
+        }
+        
+        .result-item strong {
+            min-width: 120px;
+            display: inline-block;
+            color: var(--dark);
+        }
+        
+        .status-success {
+            color: var(--success);
+            font-weight: 600;
+        }
+        
+        .status-error {
+            color: var(--danger);
+            font-weight: 600;
+        }
+        
+        .guide {
+            background-color: #f1f8fe;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .guide-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .guide-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .guide-list {
+            padding-left: 20px;
+        }
+        
+        .guide-list li {
+            margin-bottom: 10px;
+        }
+        
+        .api-info {
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px dashed #ddd;
+        }
+        
+        .api-info-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .api-info-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .api-endpoint {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+        
+        .api-method {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+        
+        .method-post {
+            background-color: var(--success);
+        }
+        
+        .api-request, .api-response {
+            margin-top: 15px;
+        }
+        
+        .api-section-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 50px;
+        }
+        
+        .credit {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+                justify-content: center;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                flex: 1 0 50%;
+                text-align: center;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fab fa-telegram"></i>
+                    <div class="logo-text">
+                        <h1>Telegram Report Tool</h1>
+                        <p>Report users, bots, and groups with ease</p>
+                    </div>
+                </div>
+                <a href="https://t.me/SHADOWJOKER_GROUP" class="tg-join-btn" target="_blank">
+                    <i class="fab fa-telegram"></i> Join Our Group
+                </a>
+            </div>
+        </header>
+        
+        <div class="main-card">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('user')">
+                    <i class="fas fa-user"></i> User Report
+                    <span class="tab-badge">!</span>
+                </div>
+                <div class="tab" onclick="switchTab('bot')">
+                    <i class="fas fa-robot"></i> Bot Report
+                </div>
+                <div class="tab" onclick="switchTab('group')">
+                    <i class="fas fa-users"></i> Group Report
+                </div>
+            </div>
+            
+            <!-- User Report Tab -->
+            <div id="user-tab" class="tab-content active">
+                <div class="form-group">
+                    <label for="user-username" class="form-label">
+                        <i class="fas fa-at"></i> Username or Phone Number
+                    </label>
+                    <input type="text" id="user-username" class="form-control" placeholder="@username or +8801XXXXXXXXX" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-reason" class="form-label">
+                        <i class="fas fa-flag"></i> Reason for Report
+                    </label>
+                    <select id="user-reason" class="form-control">
+                        <option value="spam">Spam</option>
+                        <option value="violence">Violent Content</option>
+                        <option value="pornography">Pornographic Content</option>
+                        <option value="scam">Scam/Fraud</option>
+                        <option value="fake">Fake Account</option>
+                        <option value="harassment">Harassment</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-details" class="form-label">
+                        <i class="fas fa-info-circle"></i> Additional Details
+                    </label>
+                    <textarea id="user-details" class="form-control" rows="4" placeholder="Please provide any additional information that might help us investigate..."></textarea>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" id="user-block" class="form-check-input">
+                    <label for="user-block" class="form-check-label">Block this user after reporting</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-api" class="form-label">
+                        <i class="fas fa-link"></i> API Endpoint (Optional)
+                    </label>
+                    <input type="text" id="user-api" class="form-control" placeholder="https://yourdomain.com/api/report/user" value="https://api.telegram-report-tool.com/v1/report/user">
+                </div>
+            </div>
+            
+            <!-- Bot Report Tab -->
+            <div id="bot-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="bot-username" class="form-label">
+                        <i class="fas fa-at"></i> Bot Username
+                    </label>
+                    <input type="text" id="bot-username" class="form-control" placeholder="@example_bot" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bot-reason" class="form-label">
+                        <i class="fas fa-flag"></i> Reason for Report
+                    </label>
+                    <select id="bot-reason" class="form-control">
+                        <option value="spam">Spam</option>
+                        <option value="scam">Scam/Fraud</option>
+                        <option value="fake">Fake Bot</option>
+                        <option value="malicious">Malicious Functionality</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bot-details" class="form-label">
+                        <i class="fas fa-info-circle"></i> Additional Details
+                    </label>
+                    <textarea id="bot-details" class="form-control" rows="4" placeholder="Please describe the issue with this bot..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bot-api" class="form-label">
+                        <i class="fas fa-link"></i> API Endpoint (Optional)
+                    </label>
+                    <input type="text" id="bot-api" class="form-control" placeholder="https://yourdomain.com/api/report/bot" value="https://api.telegram-report-tool.com/v1/report/bot">
+                </div>
+            </div>
+            
+            <!-- Group Report Tab -->
+            <div id="group-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="group-id" class="form-label">
+                        <i class="fas fa-at"></i> Group Username or ID
+                    </label>
+                    <input type="text" id="group-id" class="form-control" placeholder="@groupname or -1001234567890" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="group-reason" class="form-label">
+                        <i class="fas fa-flag"></i> Reason for Report
+                    </label>
+                    <select id="group-reason" class="form-control">
+                        <option value="spam">Spam</option>
+                        <option value="violence">Violent Content</option>
+                        <option value="pornography">Pornographic Content</option>
+                        <option value="scam">Scam/Fraud</option>
+                        <option value="fake">Fake Group</option>
+                        <option value="harassment">Harassment</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="group-details" class="form-label">
+                        <i class="fas fa-info-circle"></i> Additional Details
+                    </label>
+                    <textarea id="group-details" class="form-control" rows="4" placeholder="Please provide details about why you're reporting this group..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="group-api" class="form-label">
+                        <i class="fas fa-link"></i> API Endpoint (Optional)
+                    </label>
+                    <input type="text" id="group-api" class="form-control" placeholder="https://yourdomain.com/api/report/group" value="https://api.telegram-report-tool.com/v1/report/group">
+                </div>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Processing your report...</p>
+            </div>
+            
+            <button id="submit-btn" class="btn btn-primary btn-block" onclick="submitReport()">
+                <i class="fas fa-paper-plane"></i> Submit Report
+            </button>
+            
+            <div id="result" class="result">
+                <div class="result-title">
+                    <i class="fas fa-clipboard-check"></i> Report Status
+                </div>
+                <div class="result-content" id="result-content"></div>
+            </div>
+        </div>
+        
+        <div class="guide">
+            <div class="guide-title">
+                <i class="fas fa-book"></i> User Guide
+            </div>
+            <ol class="guide-list">
+                <li>Select the appropriate tab for what you want to report (User, Bot, or Group)</li>
+                <li>Enter the username or ID of the account you're reporting</li>
+                <li>Select the reason for your report from the dropdown menu</li>
+                <li>Provide any additional details that might help with the investigation</li>
+                <li>Optionally modify the API endpoint if you're using a custom server</li>
+                <li>Click "Submit Report" to send your report</li>
+            </ol>
+        </div>
+        
+        <div class="api-info">
+            <div class="api-info-title">
+                <i class="fas fa-code"></i> API Documentation
+            </div>
+            
+            <div class="api-request">
+                <div class="api-section-title">API Endpoints:</div>
+                
+                <div class="api-endpoint">
+                    <span class="api-method method-post">POST</span> /v1/report/user
+                </div>
+                <div class="api-endpoint">
+                    <span class="api-method method-post">POST</span> /v1/report/bot
+                </div>
+                <div class="api-endpoint">
+                    <span class="api-method method-post">POST</span> /v1/report/group
+                </div>
+                
+                <div class="api-section-title" style="margin-top: 20px;">Example Request (User Report):</div>
+                <pre>
+{
+    "type": "user",
+    "identifier": "@username_or_phone",
+    "reason": "spam",
+    "details": "This user is sending spam messages",
+    "block": true
+}</pre>
+                
+                <div class="api-section-title">Example Response:</div>
+                <pre>
+{
+    "success": true,
+    "message": "User successfully reported",
+    "report_id": "USER-1689345678901",
+    "timestamp": "2025-08-14T12:34:56Z"
+}</pre>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Developed with <i class="fas fa-heart" style="color: #e74c3c;"></i> by <span class="credit">SHADOW JOKER</span></p>
+            <p>Join our Telegram group for support: <a href="https://t.me/+DLEo8TQ1PjIzYzFl" target="_blank">@SHADOWJOKER_GROUP</a></p>
+        </div>
+    </div>
+
+    <script>
+        // ট্যাব সুইচিং ফাংশন
+        function switchTab(tabName) {
+            // সব ট্যাব এবং ট্যাব কন্টেন্ট নিষ্ক্রিয় করুন
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // নির্বাচিত ট্যাব এবং কন্টেন্ট সক্রিয় করুন
+            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+        
+        // API এ রিপোর্ট জমা দেওয়ার ফাংশন
+        async function submitReport() {
+            const submitBtn = document.getElementById('submit-btn');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const resultContent = document.getElementById('result-content');
+            
+            // লোডিং স্টেট সেট করুন
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            
+            try {
+                // বর্তমান সক্রিয় ট্যাব নির্ধারণ করুন
+                const activeTab = document.querySelector('.tab.active').getAttribute('onclick').replace("switchTab('", "").replace("')", "");
+                
+                let reportData = {};
+                let endpoint = document.getElementById(`${activeTab}-api`).value || '';
+                
+                // ট্যাব অনুযায়ী ডেটা প্রস্তুত করুন
+                if (activeTab === 'user') {
+                    const username = document.getElementById('user-username').value;
+                    if (!username) {
+                        throw new Error('Username or phone number is required');
+                    }
+                    
+                    reportData = {
+                        type: 'user',
+                        identifier: username,
+                        reason: document.getElementById('user-reason').value,
+                        details: document.getElementById('user-details').value,
+                        block: document.getElementById('user-block').checked
+                    };
+                    
+                    if (!endpoint) {
+                        endpoint = '/v1/report/user';
+                    }
+                } 
+                else if (activeTab === 'bot') {
+                    const username = document.getElementById('bot-username').value;
+                    if (!username.startsWith('@') || username.length < 5) {
+                        throw new Error('Please enter a valid bot username starting with @');
+                    }
+                    
+                    reportData = {
+                        type: 'bot',
+                        identifier: username,
+                        reason: document.getElementById('bot-reason').value,
+                        details: document.getElementById('bot-details').value
+                    };
+                    
+                    if (!endpoint) {
+                        endpoint = '/v1/report/bot';
+                    }
+                } 
+                else if (activeTab === 'group') {
+                    const groupId = document.getElementById('group-id').value;
+                    if (!groupId) {
+                        throw new Error('Group username or ID is required');
+                    }
+                    
+                    reportData = {
+                        type: 'group',
+                        identifier: groupId,
+                        reason: document.getElementById('group-reason').value,
+                        details: document.getElementById('group-details').value
+                    };
+                    
+                    if (!endpoint) {
+                        endpoint = '/v1/report/group';
+                    }
+                }
+                
+                // Validate endpoint URL
+                if (!endpoint.startsWith('http://') && !endpoint.startsWith('https://')) {
+                    endpoint = window.location.origin + (endpoint.startsWith('/') ? endpoint : '/' + endpoint);
+                }
+                
+                // API কল করুন
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reportData)
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to submit report');
+                }
+                
+                // রেজাল্ট দেখান
+                resultContent.innerHTML = `
+                    <div class="result-item">
+                        <strong>Type:</strong> <span>${reportData.type}</span>
+                    </div>
+                    <div class="result-item">
+                        <strong>Identifier:</strong> <span>${reportData.identifier}</span>
+                    </div>
+                    <div class="result-item">
+                        <strong>Reason:</strong> <span>${getReasonText(reportData.reason, activeTab)}</span>
+                    </div>
+                    ${reportData.details ? `
+                    <div class="result-item">
+                        <strong>Details:</strong> <span>${reportData.details}</span>
+                    </div>` : ''}
+                    <div class="result-item">
+                        <strong>Status:</strong> <span class="status-success">${data.message}</span>
+                    </div>
+                    ${data.report_id ? `
+                    <div class="result-item">
+                        <strong>Report ID:</strong> <span>${data.report_id}</span>
+                    </div>` : ''}
+                    <div class="result-item">
+                        <strong>API Used:</strong> <span>${endpoint}</span>
+                    </div>
+                `;
+                
+                result.style.display = 'block';
+                
+            } catch (error) {
+                resultContent.innerHTML = `
+                    <div class="result-item">
+                        <strong>Error:</strong> <span class="status-error">${error.message}</span>
+                    </div>
+                    <div class="result-item">
+                        <strong>Solution:</strong> <span>Please check the information and try again</span>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="submitReport()">
+                            <i class="fas fa-sync-alt"></i> Try Again
+                        </button>
+                    </div>
+                `;
+                result.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+                result.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // কারণের টেক্সট প্রদর্শনের জন্য হেল্পার ফাংশন
+        function getReasonText(reasonValue, type) {
+            const reasons = {
+                user: {
+                    spam: 'Spam',
+                    violence: 'Violent Content',
+                    pornography: 'Pornographic Content',
+                    scam: 'Scam/Fraud',
+                    fake: 'Fake Account',
+                    harassment: 'Harassment',
+                    other: 'Other'
+                },
+                bot: {
+                    spam: 'Spam',
+                    scam: 'Scam/Fraud',
+                    fake: 'Fake Bot',
+                    malicious: 'Malicious Functionality',
+                    other: 'Other'
+                },
+                group: {
+                    spam: 'Spam',
+                    violence: 'Violent Content',
+                    pornography: 'Pornographic Content',
+                    scam: 'Scam/Fraud',
+                    fake: 'Fake Group',
+                    harassment: 'Harassment',
+                    other: 'Other'
+                }
+            };
+            
+            return reasons[type][reasonValue] || reasonValue;
+        }
+    </script>
+</body>
+</html>
